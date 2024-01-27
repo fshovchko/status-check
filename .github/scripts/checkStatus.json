@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "url": "https://api.statuscake.com/v1/uptime/6958872",
+      "data": {
+        "test_type": "Ping"
+      }
+    }, {
+      "url": "https://esl-ui.com/bundles/localdev.css",
+      "data": {
+        "test_type": "CSS"
+      }
+    }, {
+      "url": "https://esl-ui.com/bundles/localdev.js",
+      "data": {
+        "test_type": "JS"
+      }
+    }, {
+      "url": "https://esl-ui.com/manifest.webmanifest",
+      "data": {
+        "test_type": "Webmanifest"
+      }
+    }, {
+      "url": "https://esl-ui.com/",
+      "data": {
+        "test_type": "Ping"
+      }
+    }
+  ]
+}
