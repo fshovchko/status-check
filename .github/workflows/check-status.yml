@@ -1,8 +1,6 @@
-name: Check URL Availability
+name: Uptime Status Check (esl-ui.com)
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'
   workflow_dispatch:
 
 jobs:
@@ -32,4 +30,4 @@ jobs:
           STATUS_REPORT_DATE: ${{ vars.STATUS_REPORT_DATE }}
           UPTIME_API_TOKEN: ${{ secrets.UPTIME_API_TOKEN }}
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: node .github/scripts/checkStatus.js
+        run: node .github/scripts/status-check/status-check.js
