@@ -2,18 +2,23 @@
   "tests": [
     {
       "url": "https://api.statuscake.com/v1/uptime/6959035",
+      "fetch_type": "statuscake",
       "test_type": "DNS"
     }, {
       "url": "https://esl-ui.com/bundles/localdev.css",
+      "fetch_type": "esl",
       "test_type": "CSS"
     }, {
-      "url": "https://esl-ui.com/bundles/localdev.js",
+      "url": "https://esl-ui.com/bundles/locasldev.js",
+      "fetch_type": "esl",
       "test_type": "JS"
     }, {
       "url": "https://esl-ui.com/manifest.webmanifest",
+      "fetch_type": "esl",
       "test_type": "Webmanifest"
     }, {
       "url": "https://esl-ui.com/",
+      "fetch_type": "esl",
       "test_type": "Ping"
     }
   ]
