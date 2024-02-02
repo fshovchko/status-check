@@ -1,7 +1,7 @@
 const fetchPreload = import('node-fetch').then(mod => mod.default)
 const fetch = (...args) => fetchPreload.then(fn => fn(...args))
 
-class StatusCakeFetch {
+class StatusCakeManager {
   static async fetch(testData) {
     const response = await fetch(testData.url, {
       headers: {
@@ -16,4 +16,4 @@ class StatusCakeFetch {
   }
 }
 
-module.exports = StatusCakeFetch;
+module.exports = StatusCakeManager;

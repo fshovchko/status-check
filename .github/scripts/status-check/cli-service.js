@@ -6,31 +6,25 @@ const [owner, repo] = repository.split('/');
 const botName = 'esl-statuscheck-bot';
 
 class CLIService {
-  #label = 'website status';
-  #issue;
-  #issueNumber;
-  #comments;
+  label = 'website status';
 
-  static #instance;
-
-  static create() {
-    if (this.#instance) return this.#instance;
-    return this.#instance = new CLIService();
-  }
+  _issue;
+  _issueNumber;
+  _comments;
 
   get issue() {
-    if (this.#issue) return this.#issue;
-    return this.#issue = JSON.parse(execSync(`gh issue list --repo ${owner}/${repo} --label "${this.#label}" --app ${botName} --state open --json number,title`, { encoding: 'utf-8' }))[0];
+    if (this._issue) return this._issue;
+    return this._issue = JSON.parse(execSync(`gh issue list --repo ${owner}/${repo} --label "${this.label}" --app ${botName} --state open --json number,title`, { encoding: 'utf-8' }))[0];
   }
 
   get issueNumber() {
-    return this.#issueNumber || this.issue?.number;
+    return this._issueNumber || this.issue?.number;
   }
 
   get comments() {
-    if (this.#comments) return this.#comments;
+    if (this._comments) return this._comments;
     const {comments, body, author} = JSON.parse(execSync(`gh issue view ${this.issueNumber} -c --json comments,body,author`, { encoding: 'utf-8' }));
-    return this.#comments = comments.concat([{body, author}]);
+    return this._comments = comments.concat([{body, author}]);
   }
 
   addComment(commentBody) {
@@ -38,7 +32,7 @@ class CLIService {
   }
 
   async createIssue(issueBody) {
-    execSync(`gh issue create --repo ${owner}/${repo} --title "Website Down" --body "${issueBody}" --label "${this.#label}" --assignee fshovchko`);
+    execSync(`gh issue create --repo ${owner}/${repo} --title "Website Down" --body "${issueBody}" --label "${this.label}" --assignee fshovchko`);
     await this.awaitIssue();
   }
 

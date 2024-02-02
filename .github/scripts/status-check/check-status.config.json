@@ -9,7 +9,7 @@
       "fetch_type": "esl",
       "test_type": "CSS"
     }, {
-      "url": "https://esl-ui.com/bundles/locasldev.js",
+      "url": "https://esl-ui.com/bundles/localdev.js",
       "fetch_type": "esl",
       "test_type": "JS"
     }, {

@@ -1,49 +1,43 @@
 const CLIService = require('./cli-service');
-const FetchService = require('./fetch-service/fetch-service');
+const FetchManager = require('./fetch-manager/fetch-manager');
 
 const statusDate = 'STATUS_REPORT_DATE';
 
 class StatusCheckService {
-  #isEveryStatusUp = true;
-  #cliService = CLIService.create();
-  #fetchService = FetchService.create();
+  cliService = new CLIService();
+  fetchService = new FetchManager();
 
-  static #instance;
-
-  static create() {
-    if (this.#instance) return this.#instance;
-    return this.#instance = new StatusCheckService();
-  }
+  _isEveryStatusUp = true;
 
   async updateIssue(testData) {
-    if (testData.status === 'down') this.#isEveryStatusUp = false;
-    if (!this.#cliService.issue && testData.status !== 'up') await this.createIssue(testData);
-    else if (this.#cliService.issue) this.createComment(testData);
+    if (testData.status === 'down') this._isEveryStatusUp = false;
+    if (!this.cliService.issue && testData.status !== 'up') await this.createIssue(testData);
+    else if (this.cliService.issue) this.createComment(testData);
   }
 
   async createIssue(testData) {
-    const date = parseInt(this.#cliService.getVariable(statusDate), 10);
+    const date = parseInt(this.cliService.getVariable(statusDate), 10);
     if (date && date + (30 * 60 * 1000) > Date.now()) return;
     // exadel-inc/esl-core-team, 
-    await this.#cliService.createIssue(this.formatData(testData));
+    await this.cliService.createIssue(this.formatData(testData));
   }
 
   createComment(testData) {
-    const comments = this.#cliService.comments.filter((comment) => (/Test type: (.*)/i.exec(comment.body) || [])[1] === testData.test_type);
+    const comments = this.cliService.comments.filter((comment) => (/Test type: (.*)/i.exec(comment.body) || [])[1] === testData.test_type);
     const lastComment = comments[comments.length-1];
     if (!lastComment && testData.status === 'up') return;
     if ((/Status: (.*) /i.exec(lastComment?.body) || [])[1]?.toLowerCase() === testData.status) return;
-    this.#cliService.addComment(this.formatData(testData));
+    this.cliService.addComment(this.formatData(testData));
   }
 
   closeIssue() {
-    if (!(this.#isEveryStatusUp && this.#cliService.issue)) return;
-    this.#cliService.updateVariable(statusDate, JSON.stringify(Date.now()));
-    this.#cliService.closeIssue();
+    if (!(this._isEveryStatusUp && this.cliService.issue)) return;
+    this.cliService.updateVariable(statusDate, JSON.stringify(Date.now()));
+    this.cliService.closeIssue();
   }
 
   async checkStatus(testData) {
-    const fetchedData = await this.#fetchService.checkStatus(testData);
+    const fetchedData = await this.fetchService.checkStatus(testData);
     await this.updateIssue(fetchedData);
   }
 
