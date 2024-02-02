@@ -7,10 +7,10 @@ class StatusCheckService {
   cliService = new CLIService();
   fetchService = new FetchManager();
 
-  _isEveryStatusUp = true;
+  isEveryStatusUp = true;
 
   async updateIssue(testData) {
-    if (testData.status === 'down') this._isEveryStatusUp = false;
+    if (testData.status === 'down') this.isEveryStatusUp = false;
     if (!this.cliService.issue && testData.status !== 'up') await this.createIssue(testData);
     else if (this.cliService.issue) this.createComment(testData);
   }
@@ -31,7 +31,7 @@ class StatusCheckService {
   }
 
   closeIssue() {
-    if (!(this._isEveryStatusUp && this.cliService.issue)) return;
+    if (!(this.isEveryStatusUp && this.cliService.issue)) return;
     this.cliService.updateVariable(statusDate, JSON.stringify(Date.now()));
     this.cliService.closeIssue();
   }
