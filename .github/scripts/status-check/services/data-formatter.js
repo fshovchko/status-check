@@ -1,5 +1,5 @@
-class MarkdownService {
-  static formatData(data) {
+class DataFormatter {
+  static getMarkdown(data) {
     return `
 ### Test type: ${data.test_type}
 #### Status: ${data.status.toUpperCase()} ${data.status === 'up' ? '🟢' : '🔴'}
@@ -8,4 +8,4 @@ class MarkdownService {
   }
 }
 
-module.exports = MarkdownService;
+module.exports = DataFormatter;

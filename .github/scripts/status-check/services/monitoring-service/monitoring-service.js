@@ -3,7 +3,7 @@ const ESLMonitor = require('./esl-monitor');
 
 class MonitoringService {
   async checkStatus(testData) {
-    switch (testData.fetch_type) {
+    switch (testData.provider) {
       case 'statuscake':
         return StatusCakeMonitor.fetch(testData);
       case 'esl':

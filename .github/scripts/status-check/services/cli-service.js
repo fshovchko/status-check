@@ -1,18 +1,22 @@
-const { execSync } = require('child_process');
+const {execSync} = require('child_process');
 
 const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 const botName = 'esl-statuscheck-bot';
 
 class CLIService {
-  label = 'website status';
+  issueConfig;
 
   _issue;
   _issueNumber;
   _comments;
 
+  constructor(issueConfig) {
+    this.issueConfig = issueConfig;
+  }
+
   get issue() {
     if (this._issue) return this._issue;
-    return this._issue = JSON.parse(execSync(`gh issue list --repo ${owner}/${repo} --label "${this.label}" --app ${botName} --state open --json number,title`, { encoding: 'utf-8' }))[0];
+    return this._issue = JSON.parse(execSync(`gh issue list --repo ${owner}/${repo} --label "${this.issueConfig.label}" --app ${botName} --state open --json number,title`, { encoding: 'utf-8' }))[0];
   }
 
   get issueNumber() {
@@ -30,8 +34,9 @@ class CLIService {
   }
 
   async createIssue(issueBody) {
+    const {title, label, assignee} = this.issueConfig;
     // exadel-inc/esl-core-team, 
-    execSync(`gh issue create --repo ${owner}/${repo} --title "Website Down" --body "${issueBody}" --label "${this.label}" --assignee fshovchko`);
+    execSync(`gh issue create --repo ${owner}/${repo} --title "${title}" --body "${issueBody}" --label "${label}" --assignee ${assignee}`);
     await this.awaitIssue();
   }
 
