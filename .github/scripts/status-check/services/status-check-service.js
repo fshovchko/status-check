@@ -1,6 +1,5 @@
 const CLIService = require('./cli-service');
 const MonitoringService = require('./monitoring-service/monitoring-service');
-const DataFormatter = require('./data-formatter');
 
 const statusDate = 'STATUS_REPORT_DATE';
 
@@ -9,10 +8,11 @@ class StatusCheckService {
   monitor;
   isEveryStatusUp;
 
-  constructor(issueConfig) {
+  constructor(issueConfig, formatText) {
     this.cli = new CLIService(issueConfig);
     this.monitor = new MonitoringService();
     this.isEveryStatusUp = true;
+    this.formatText = formatText;
   }
 
   async updateIssue(testData) {
@@ -24,7 +24,7 @@ class StatusCheckService {
   async createIssue(testData) {
     const date = parseInt(this.cli.getVariable(statusDate), 10);
     if (date && date + (30 * 60 * 1000) > Date.now()) return;
-    await this.cli.createIssue(DataFormatter.getMarkdown(testData));
+    await this.cli.createIssue(this.formatText(testData));
   }
 
   async checkStatus(testData) {
@@ -37,7 +37,7 @@ class StatusCheckService {
     const lastComment = comments[comments.length-1];
     if (!lastComment && testData.status === 'up') return;
     if ((/Status: (.*) /i.exec(lastComment?.body) || [])[1]?.toLowerCase() === testData.status) return;
-    this.cli.addComment(DataFormatter.getMarkdown(testData));
+    this.cli.addComment(this.formatText(testData));
   }
 
   closeIssue() {
