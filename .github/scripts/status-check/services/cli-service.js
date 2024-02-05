@@ -68,9 +68,9 @@ class CLIService {
     return process.env[name];
   }
 
-  updateVariable(name, data) {
+  updateVariable(name, value) {
     if (this.getVariable(name)) execSync(`gh variable delete ${name}`);
-    execSync(`gh variable set ${name} --body "${data}"`);
+    execSync(`gh variable set ${name} --body "${value}"`);
   }
 }
 

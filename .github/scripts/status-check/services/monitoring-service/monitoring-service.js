@@ -1,5 +1,5 @@
 const StatusCakeMonitor = require('./statuscake-monitor');
-const ESLMonitor = require('./esl-monitor');
+const HttpFetchMonitor = require('./http-monitor');
 
 class MonitoringService {
   async checkStatus(testData) {
@@ -7,7 +7,7 @@ class MonitoringService {
       case 'statuscake':
         return StatusCakeMonitor.fetch(testData);
       case 'esl':
-        return ESLMonitor.fetch(testData);
+        return HttpFetchMonitor.fetch(testData);
     }
   }
 }
