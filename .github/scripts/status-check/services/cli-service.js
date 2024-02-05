@@ -1,8 +1,6 @@
 const { execSync } = require('child_process');
 
-const repository = process.env.GITHUB_REPOSITORY;
-const [owner, repo] = repository.split('/');
-
+const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
 const botName = 'esl-statuscheck-bot';
 
 class CLIService {
@@ -32,6 +30,7 @@ class CLIService {
   }
 
   async createIssue(issueBody) {
+    // exadel-inc/esl-core-team, 
     execSync(`gh issue create --repo ${owner}/${repo} --title "Website Down" --body "${issueBody}" --label "${this.label}" --assignee fshovchko`);
     await this.awaitIssue();
   }
@@ -60,13 +59,13 @@ class CLIService {
     if (this.issueNumber) execSync(`gh issue close ${this.issueNumber}`);
   }
 
-  getVariable(varName) {
-    return process.env[varName];
+  getVariable(name) {
+    return process.env[name];
   }
 
-  updateVariable(varName, data) {
-    if (this.getVariable(varName)) execSync(`gh variable delete ${varName}`);
-    execSync(`gh variable set ${varName} --body "${data}"`);
+  updateVariable(name, data) {
+    if (this.getVariable(name)) execSync(`gh variable delete ${name}`);
+    execSync(`gh variable set ${name} --body "${data}"`);
   }
 }
 

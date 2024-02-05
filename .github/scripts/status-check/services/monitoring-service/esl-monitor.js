@@ -1,7 +1,7 @@
 const fetchPreload = import('node-fetch').then(mod => mod.default)
 const fetch = (...args) => fetchPreload.then(fn => fn(...args))
 
-class ESLManager {
+class ESLMonitor {
   static async fetch(testData) {
     try {
       const response = await fetch(testData.url);
@@ -14,4 +14,4 @@ class ESLManager {
   }
 }
 
-module.exports = ESLManager;
+module.exports = ESLMonitor;
